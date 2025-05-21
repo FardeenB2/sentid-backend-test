@@ -3,6 +3,8 @@
 import React from 'react';
 import ProtectedRoute from '@/app/components/ProtectedRoute';
 import { useAuth } from '@/app/context/AuthContext';
+import GoalTracker from '@/app/components/GoalTracker'; // Import the wrapper component
+
 
 export default function DashboardPage() {
   const { user, logout } = useAuth();
@@ -47,6 +49,11 @@ export default function DashboardPage() {
                       ))}
                     </dl>
                   </div>
+                </div>
+
+                {/* Goal Tracker Integration - Added below the existing content */}
+                <div className="mt-8">
+                  <GoalTracker />
                 </div>
               </div>
             </div>
