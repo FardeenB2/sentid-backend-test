@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import { AuthProvider } from "@/app/context/AuthContext";
+import StyledComponentsRegistry from "./registry";
 import "./globals.css";
 import { PropsWithChildren } from "react";
 
@@ -14,7 +15,11 @@ const RootLayout: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <StyledComponentsRegistry>
+            {children}
+          </StyledComponentsRegistry>
+        </AuthProvider>
       </body>
     </html>
   );

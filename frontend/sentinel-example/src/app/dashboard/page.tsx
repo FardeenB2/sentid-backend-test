@@ -3,7 +3,12 @@
 import React from 'react';
 import ProtectedRoute from '@/app/components/ProtectedRoute';
 import { useAuth } from '@/app/context/AuthContext';
-import GoalTracker from '@/app/components/GoalTracker'; // Import the wrapper component
+
+// Import GoalTracker dynamically to avoid styled-components SSR issues
+const GoalTracker = dynamic(() => import('@/app/components/GoalTracker'), { 
+  ssr: false 
+});
+
 
 
 export default function DashboardPage() {
@@ -24,32 +29,37 @@ export default function DashboardPage() {
           </div>
         </header>
         <main>
-          <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          
+        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
             <div className="px-4 py-6 sm:px-0">
               <div className="border-4 border-dashed border-gray-200 rounded-lg p-6">
                 <h2 className="text-lg font-medium text-gray-900 mb-4">Welcome, {user?.sub || 'User'}!</h2>
-
-
-                {/* Debug Text */}
-                <div className="mb-4 p-2 bg-yellow-100 border border-yellow-300 rounded">
-                  <p>Debug: Goal Tracker should appear below this message</p>
-                </div>
-                
-                {/* Goal Tracker with error catching */}
-                <div className="mt-8">
-                  {(() => {
-                    try {
-                      return <GoalTracker />;
-                    } catch (error: any) {
-                      console.error("Error rendering GoalTracker:", error);
-                      return (
-                        <div className="p-4 bg-red-100 text-red-700 rounded">
-                          <p>Error rendering Goal Tracker component:</p>
-                          <pre>{error.message}</pre>
+                <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+                  <div className="px-4 py-5 sm:px-6">
+                    <h3 className="text-lg leading-6 font-medium text-gray-900">
+                      User Information
+                    </h3>
+                    <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                      Details from your authentication token
+                    </p>
+                  </div>
+                  <div className="border-t border-gray-200">
+                    <dl>
+                      {user && Object.entries(user).map(([key, value]) => (
+                        <div key={key} className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                          <dt className="text-sm font-medium text-gray-500">{key}</dt>
+                          <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                            {typeof value === 'object' ? JSON.stringify(value) : String(value)}
+                          </dd>
                         </div>
-                      );
-                    }
-                  })()}
+                      ))}
+                    </dl>
+                  </div>
+                </div>
+
+                {/* Goal Tracker Integration */}
+                <div className="mt-8">
+                  <GoalTracker />
                 </div>
               </div>
             </div>
